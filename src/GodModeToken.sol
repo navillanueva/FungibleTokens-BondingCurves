@@ -6,24 +6,25 @@ import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract GodModeToken is ERC20, ReentrancyGuard, Ownable {
-    address private controller;
+    address private god;
 
     constructor(string memory name, string memory symbol, address initialOwner)
         ERC20(name, symbol)
         ReentrancyGuard()
         Ownable(initialOwner)
     {
-        controller = msg.sender;
+        god = msg.sender;
     }
 
     // Set a new controller
-    function setController(address _newController) external onlyOwner {
-        controller = _newController;
+    function setGod(address _newGod) external onlyOwner {
+        god = _newGod;
     }
 
     // Controller transfers tokens from one address to another
-    function controllerTransfer(address from, address to, uint256 amount) external nonReentrant {
-        require(msg.sender == controller, "Only the controller can perform this action.");
+    // not sure if this overrides the regulat transFrom function
+    function godTransfer(address from, address to, uint256 amount) external nonReentrant {
+        require(msg.sender == god, "Only the god can perform this action.");
         require(from != address(0) && to != address(0), "Invalid address.");
         _transfer(from, to, amount);
     }
