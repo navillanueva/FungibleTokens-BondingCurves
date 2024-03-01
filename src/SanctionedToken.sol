@@ -7,9 +7,11 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract SanctionedToken is ERC20, Ownable {
     mapping(address => bool) public banned;
 
-    constructor(string memory name, string memory symbol, address initialOwner) ERC20(name, symbol) Ownable(initialOwner) {
-    // Contract body
-
+    constructor(string memory name, string memory symbol, address initialOwner)
+        ERC20(name, symbol)
+        Ownable(initialOwner)
+    {
+        // Contract body
     }
 
     // Admin can ban an address
@@ -20,7 +22,7 @@ contract SanctionedToken is ERC20, Ownable {
 
     // Admin can unban an address
     function unbanAddress(address _address) external onlyOwner {
-        require(banned [_address], "Address is not banned");
+        require(banned[_address], "Address is not banned");
         banned[_address] = false;
     }
 

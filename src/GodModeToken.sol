@@ -14,6 +14,7 @@ contract GodModeToken is ERC20, ReentrancyGuard, Ownable {
         Ownable(initialOwner)
     {
         god = msg.sender;
+        _mint(msg.sender, 1000000e18);
     }
 
     // Set a new controller
