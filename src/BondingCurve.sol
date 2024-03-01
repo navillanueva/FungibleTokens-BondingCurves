@@ -3,8 +3,8 @@ pragma solidity ^0.8.0;
 
 contract BondingCurve {
     uint256 public totalSupply;
-    uint256 public constant initialPrice = 1 ether; 
-    uint256 public constant slope = 0.01 ether; 
+    uint256 public constant initialPrice = 1 ether;
+    uint256 public constant slope = 0.01 ether;
     uint256 public constant slippageTolerance = 5; // Slippage for sandwich attacks
 
     mapping(address => uint256) public balances;
@@ -18,7 +18,7 @@ contract BondingCurve {
         uint256 totalPrice = calculateTotalPrice(numTokens);
         uint256 pricePerToken = totalPrice / numTokens;
         require(pricePerToken <= maxPricePerToken, "Slippage tolerance exceeded");
-        
+
         // Slippage check
         require(msg.value >= totalPrice, "Insufficient ETH sent");
         require(((maxPricePerToken * 100) / pricePerToken) <= (100 + slippageTolerance), "Slippage tolerance exceeded");

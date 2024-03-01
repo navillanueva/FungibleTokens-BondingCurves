@@ -10,8 +10,6 @@ contract UntrustedEscrow is ReentrancyGuard {
     IERC20 public token;
     uint256 public depositAmount;
     uint256 public depositTime;
-
-    // Set a delay for withdrawal (3 days)
     uint256 public constant DELAY = 3 days;
 
     event Deposited(address indexed token, address indexed buyer, uint256 amount);
