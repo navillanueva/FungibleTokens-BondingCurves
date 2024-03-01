@@ -22,15 +22,6 @@ contract GodModeTokenTest is Test {
         godModeToken.transfer(user1, 1000); // Assuming deployer initially holds total supply
     }
 
-    // function testSetGod() public {
-    //     assertEq(godModeToken.owner(), god);
-    //     godModeToken.setGod(newGod);
-    //     (bool success, bytes memory data) = address(godModeToken).call(abi.encodeWithSignature("god()"));
-    //     assert(success);
-    //     address currentGod = abi.decode(data, (address));
-    //     assertEq(currentGod, newGod);
-    // }
-
     function testFailSetGodByNonOwner() public {
         vm.startPrank(user1);
         godModeToken.setGod(newGod);

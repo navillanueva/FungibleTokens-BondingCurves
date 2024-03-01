@@ -11,7 +11,7 @@ contract SanctionedToken is ERC20, Ownable {
         ERC20(name, symbol)
         Ownable(initialOwner)
     {
-        // Contract body
+        _mint(msg.sender, 1000000e18);
     }
 
     // Admin can ban an address
