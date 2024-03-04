@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
+// inherit and mint an ERC20 token
+
 contract BondingCurve {
     uint256 public totalSupply;
     uint256 public constant initialPrice = 1 ether;
@@ -13,14 +15,20 @@ contract BondingCurve {
     event TokensSold(address seller, uint256 amount, uint256 pricePerToken);
 
     // Function to buy tokens
+    // make it external if you dont call it internally
+
+    // parameteros for ethere and minimumTokens you want to buy
+    // if it was a linear bonding curve with another ERC20 we could just use transferFrom
     function buyTokens(uint256 numTokens, uint256 maxPricePerToken) public payable {
         require(numTokens > 0, "Must buy at least one token");
         uint256 totalPrice = calculateTotalPrice(numTokens);
         uint256 pricePerToken = totalPrice / numTokens;
+        // this should be enough
         require(pricePerToken <= maxPricePerToken, "Slippage tolerance exceeded");
 
         // Slippage check
         require(msg.value >= totalPrice, "Insufficient ETH sent");
+        // remove this
         require(((maxPricePerToken * 100) / pricePerToken) <= (100 + slippageTolerance), "Slippage tolerance exceeded");
 
         balances[msg.sender] += numTokens;
@@ -29,17 +37,19 @@ contract BondingCurve {
 
         // Refund excess ETH
         if (msg.value > totalPrice) {
+            // use a low level call to send money because this doesnt guarantee sending to Smart Wallets
             payable(msg.sender).transfer(msg.value - totalPrice);
         }
     }
 
     function sellTokens(uint256 numTokens, uint256 minPricePerToken) public {
         require(numTokens > 0 && balances[msg.sender] >= numTokens, "Invalid token amount");
-        uint256 totalPrice = calculateTotalPrice(numTokens - 1) - calculateTotalPrice(numTokens - 1 - numTokens);
+        uint256 totalPrice = calculateTotalPrice(numTokens - 1) - calculateTotalPrice(numTokens - 1 - numTokens); //this is not the right way to do it
         uint256 pricePerToken = totalPrice / numTokens;
         require(pricePerToken >= minPricePerToken, "Slippage tolerance exceeded");
 
         // Slippage check
+        // remove
         require(((minPricePerToken * 100) / pricePerToken) >= (100 - slippageTolerance), "Slippage tolerance exceeded");
 
         balances[msg.sender] -= numTokens;

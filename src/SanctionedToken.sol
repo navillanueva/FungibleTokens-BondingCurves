@@ -15,12 +15,16 @@ contract SanctionedToken is ERC20, Ownable {
     }
 
     // Admin can ban an address
+    // issuing event when chanign storage
+    // custom errors are cheaper (4 bytes)
     function banAddress(address _address) external onlyOwner {
         require(!banned[_address], "Address is already banned");
         banned[_address] = true;
     }
 
     // Admin can unban an address
+    // issuing event when changing storage
+    // custom errors are cheaper (4 bytes)
     function unbanAddress(address _address) external onlyOwner {
         require(banned[_address], "Address is not banned");
         banned[_address] = false;

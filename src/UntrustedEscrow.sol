@@ -21,10 +21,13 @@ contract UntrustedEscrow is ReentrancyGuard {
     }
 
     // Allows the buyer to deposit tokens into the escrow
+
+    // change this is because there is only one buyer then in the contract
     function deposit(uint256 amount) external nonReentrant {
         require(depositAmount == 0, "Deposit already made");
 
         // Transfer tokens from the buyer to this contract
+        // use safe Trasnfer from
         require(token.transferFrom(msg.sender, address(this), amount), "Transfer failed");
 
         buyer = msg.sender;
@@ -43,6 +46,8 @@ contract UntrustedEscrow is ReentrancyGuard {
         uint256 amount = depositAmount;
         depositAmount = 0; // Prevent reentrancy
 
+
+        // safeERC20 
         require(token.transfer(seller, amount), "Transfer failed");
 
         emit Withdrawn(address(token), seller, amount);
