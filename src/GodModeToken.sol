@@ -9,13 +9,13 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract GodModeToken is ERC20, ReentrancyGuard, Ownable {
     address private god;
 
-    constructor(string memory name, string memory symbol, address initialOwner)
-        ERC20(name, symbol)
+    constructor(uint256 initialSupply)
+        ERC20("GodToken", "GOD")
         ReentrancyGuard()
-        Ownable(initialOwner)
+        Ownable(msg.sender)
     {
         god = msg.sender;
-        _mint(msg.sender, 1000000e18);
+        _mint(msg.sender, initialSupply);
     }
 
     // Set a new controller

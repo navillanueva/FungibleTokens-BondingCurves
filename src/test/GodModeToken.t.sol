@@ -18,7 +18,7 @@ contract GodModeTokenTest is Test {
         user1 = address(0x2);
         user2 = address(0x3);
 
-        godModeToken = new GodModeToken("GodModeToken", "GMT", god);
+        godModeToken = new GodModeToken(10);
         godModeToken.transfer(user1, 1000); // Assuming deployer initially holds total supply
     }
 
