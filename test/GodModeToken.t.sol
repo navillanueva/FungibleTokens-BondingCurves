@@ -1,22 +1,26 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "forge-std/Test.sol";
-import "../GodModeToken.sol";
+import {Test} from "forge-std/Test.sol";
+import {DeployToken} from "../script/DeployToken.sol";
+import {GodModeToken} from "../src/GodModeToken.sol";
 import "./mocks/MockERC20.sol";
 
 contract GodModeTokenTest is Test {
-    GodModeToken private godModeToken;
+    GodModeToken public godModeToken;
+    DeployToken public deployToken;
+
     address private god;
     address private newGod;
     address private user1;
     address private user2;
 
     function setUp() public {
-        god = address(this); // Contract deployer
-        newGod = address(0x1);
-        user1 = address(0x2);
-        user2 = address(0x3);
+        deployer = new DeployOurToken();
+        godModeToken = deployer.run();
+
+        address bob = makeAddr("bob");
+        address alice = makeAddr("alice");
 
         godModeToken = new GodModeToken(10);
         godModeToken.transfer(user1, 1000); // Assuming deployer initially holds total supply
