@@ -2,13 +2,13 @@
 pragma solidity ^0.8.0;
 
 import {Test} from "forge-std/Test.sol";
-import {DeployToken} from "../script/DeployToken.s.sol";
+import {DeployGodToken} from "../script/DeployGodToken.s.sol";
 import {GodModeToken} from "../src/GodModeToken.sol";
 import "./mocks/MockERC20.sol";
 
 contract GodModeTokenTest is Test {
     GodModeToken public godModeToken;
-    DeployToken public deployToken;
+    DeployGodToken public deployGodToken;
 
     address private god;
     address private newGod;
@@ -16,8 +16,8 @@ contract GodModeTokenTest is Test {
     address private user2;
 
     function setUp() public {
-        deployToken = new DeployGodToken(); // Correct instantiation of DeployToken
-        godModeToken = DeployGodToken(deployToken).run(); // Correctly call run() on the DeployToken instance
+        deployGodToken = new DeployGodToken(); // Correct instantiation of DeployToken
+        godModeToken = DeployGodToken(deployGodToken).run(); // Correctly call run() on the DeployToken instance
 
         address bob = makeAddr("bob");
         address alice = makeAddr("alice");
