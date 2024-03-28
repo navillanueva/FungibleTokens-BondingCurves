@@ -9,10 +9,10 @@ contract DeployToken is Script {
 
     uint256 public constant INITIAL_SUPPLY = 1000 ether;
 
-    function run() external returns (Token) {
+    function run() external returns (GodModeToken) {
         vm.startBroadcast();
-        Token to = new GodModeToken(INITIAL_SUPPLY);
+        GodModeToken gmt = new GodModeToken(INITIAL_SUPPLY);
         vm.stopBroadcast();
-        return to;
+        return gmt;
     }
 }

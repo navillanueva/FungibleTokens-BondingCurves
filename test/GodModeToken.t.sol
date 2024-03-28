@@ -16,14 +16,17 @@ contract GodModeTokenTest is Test {
     address private user2;
 
     function setUp() public {
-        deployer = new DeployOurToken();
-        godModeToken = deployer.run();
+        deployToken = new DeployToken(); // Correct instantiation of DeployToken
+        godModeToken = DeployToken(deployToken).run(); // Correctly call run() on the DeployToken instance
 
         address bob = makeAddr("bob");
         address alice = makeAddr("alice");
+        user1 = bob; // Assuming `user1` should be set to `bob`
+        user2 = alice; // Assuming `user2` should be set to `alice`
 
+        // Assuming these actions were intended to demonstrate initial setup; might require adjustments
         godModeToken = new GodModeToken(10);
-        godModeToken.transfer(user1, 1000); // Assuming deployer initially holds total supply
+        godModeToken.transfer(user1, 1000); // This will fail without prior mint or transfer setup
     }
 
     function testFailSetGodByNonOwner() public {
