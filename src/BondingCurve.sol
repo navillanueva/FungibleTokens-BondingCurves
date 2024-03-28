@@ -14,7 +14,6 @@ contract BondingCurve {
     event TokensBought(address buyer, uint256 amount, uint256 pricePerToken);
     event TokensSold(address seller, uint256 amount, uint256 pricePerToken);
 
-
     // parameteros for ethere and minimumTokens you want to buy
     // if it was a linear bonding curve with another ERC20 we could just use transferFrom
     function buyTokens(uint256 numTokens, uint256 maxPricePerToken) external payable {

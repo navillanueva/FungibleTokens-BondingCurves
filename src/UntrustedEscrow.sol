@@ -46,8 +46,7 @@ contract UntrustedEscrow is ReentrancyGuard {
         uint256 amount = depositAmount;
         depositAmount = 0; // Prevent reentrancy
 
-
-        // safeERC20 
+        // safeERC20
         require(token.transfer(seller, amount), "Transfer failed");
 
         emit Withdrawn(address(token), seller, amount);

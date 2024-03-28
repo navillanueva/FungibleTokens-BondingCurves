@@ -34,15 +34,17 @@ contract SanctionedToken is ERC20, Ownable {
 
     // Override transfer function
     function transfer(address recipient, uint256 amount) public override returns (bool) {
-        if (banned[msg.sender] || banned[recipient]) 
+        if (banned[msg.sender] || banned[recipient]) {
             revert TransferToBannedAddress(msg.sender, recipient);
+        }
         return super.transfer(recipient, amount);
     }
 
     // Override transferFrom function
     function transferFrom(address sender, address recipient, uint256 amount) public override returns (bool) {
-        if (banned[sender] || banned[recipient] || banned[msg.sender]) 
+        if (banned[sender] || banned[recipient] || banned[msg.sender]) {
             revert TransferFromBannedAddress(sender, recipient, msg.sender);
+        }
         return super.transferFrom(sender, recipient, amount);
     }
 }

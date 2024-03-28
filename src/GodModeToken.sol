@@ -13,10 +13,7 @@ contract GodModeToken is ERC20, Ownable {
     error NotGod(address caller);
     error InvalidAddress();
 
-    constructor(uint256 initialSupply)
-        ERC20("GodToken", "GOD")
-        Ownable(msg.sender)
-    {
+    constructor(uint256 initialSupply) ERC20("GodToken", "GOD") Ownable(msg.sender) {
         god = msg.sender;
         _mint(msg.sender, initialSupply);
     }
