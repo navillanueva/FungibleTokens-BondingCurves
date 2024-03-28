@@ -18,25 +18,4 @@ contract DeployGodToken is Script {
         vm.stopBroadcast();
         return gmt;
     }
-
-    function runSanction() external returns (SanctionedToken){
-        vm.startBroadcast();
-        SanctionedToken st = new SanctionedToken("SanctionedToken", "SNT", address(this));
-        vm.stopBroadcast();
-        return st;
-    }
-
-    function runEscrow(address seller, address token) external returns (UntrustedEscrow){
-        vm.startBroadcast();
-        UntrustedEscrow ue = new UntrustedEscrow(address(this), address(this));
-        vm.stopBroadcast();
-        return ue;
-    }
-
-    function runBondingCurve() external returns (BondingCurve){
-        vm.startBroadcast();
-        BondingCurve bc = new BondingCurve();
-        vm.stopBroadcast();
-        return bc;
-    }
 }
