@@ -14,12 +14,10 @@ contract BondingCurve {
     event TokensBought(address buyer, uint256 amount, uint256 pricePerToken);
     event TokensSold(address seller, uint256 amount, uint256 pricePerToken);
 
-    // Function to buy tokens
-    // make it external if you dont call it internally
 
     // parameteros for ethere and minimumTokens you want to buy
     // if it was a linear bonding curve with another ERC20 we could just use transferFrom
-    function buyTokens(uint256 numTokens, uint256 maxPricePerToken) public payable {
+    function buyTokens(uint256 numTokens, uint256 maxPricePerToken) external payable {
         require(numTokens > 0, "Must buy at least one token");
         uint256 totalPrice = calculateTotalPrice(numTokens);
         uint256 pricePerToken = totalPrice / numTokens;
@@ -42,7 +40,7 @@ contract BondingCurve {
         }
     }
 
-    function sellTokens(uint256 numTokens, uint256 minPricePerToken) public {
+    function sellTokens(uint256 numTokens, uint256 minPricePerToken) external {
         require(numTokens > 0 && balances[msg.sender] >= numTokens, "Invalid token amount");
         uint256 totalPrice = calculateTotalPrice(numTokens - 1) - calculateTotalPrice(numTokens - 1 - numTokens); //this is not the right way to do it
         uint256 pricePerToken = totalPrice / numTokens;
