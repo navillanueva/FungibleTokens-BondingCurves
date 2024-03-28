@@ -15,7 +15,6 @@ contract GodModeToken is ERC20, Ownable {
 
     constructor(uint256 initialSupply)
         ERC20("GodToken", "GOD")
-        ReentrancyGuard()
         Ownable(msg.sender)
     {
         god = msg.sender;

@@ -8,11 +8,11 @@ import {SanctionedToken} from "../src/SanctionedToken.sol";
 import {UntrustedEscrow} from "../src/UntrustedEscrow.sol";
 import {BondingCurve} from "../src/BondingCurve.sol";
 
-contract DeployToken is Script {
+contract DeployGodToken is Script {
 
     uint256 public constant INITIAL_SUPPLY = 1000 ether;
 
-    function runGod() external returns (GodModeToken) {
+    function run() external returns (GodModeToken) {
         vm.startBroadcast();
         GodModeToken gmt = new GodModeToken(INITIAL_SUPPLY);
         vm.stopBroadcast();

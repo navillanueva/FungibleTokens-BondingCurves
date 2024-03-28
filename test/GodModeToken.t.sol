@@ -16,8 +16,8 @@ contract GodModeTokenTest is Test {
     address private user2;
 
     function setUp() public {
-        deployToken = new DeployToken(); // Correct instantiation of DeployToken
-        godModeToken = DeployToken(deployToken).run(); // Correctly call run() on the DeployToken instance
+        deployToken = new DeployGodToken(); // Correct instantiation of DeployToken
+        godModeToken = DeployGodToken(deployToken).run(); // Correctly call run() on the DeployToken instance
 
         address bob = makeAddr("bob");
         address alice = makeAddr("alice");
