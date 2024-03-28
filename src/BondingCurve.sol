@@ -1,32 +1,29 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-// inherit and mint an ERC20 token
-
 contract BondingCurve {
     uint256 public totalSupply;
-    uint256 public constant initialPrice = 1 ether;
+    uint256 public constant initialPrice = 1 ether; 
     uint256 public constant slope = 0.01 ether;
-    uint256 public constant slippageTolerance = 5; // Slippage for sandwich attacks
+    uint256 public constant slippageTolerance = 5; // Percent slippage tolerance to prevent sandwich attacks
 
     mapping(address => uint256) public balances;
 
-    event TokensBought(address buyer, uint256 amount, uint256 pricePerToken);
-    event TokensSold(address seller, uint256 amount, uint256 pricePerToken);
+    event TokensBought(address indexed buyer, uint256 amount, uint256 pricePerToken);
+    event TokensSold(address indexed seller, uint256 amount, uint256 pricePerToken);
 
-    // parameteros for ethere and minimumTokens you want to buy
-    // if it was a linear bonding curve with another ERC20 we could just use transferFrom
-    function buyTokens(uint256 numTokens, uint256 maxPricePerToken) external payable {
-        require(numTokens > 0, "Must buy at least one token");
-        uint256 totalPrice = calculateTotalPrice(numTokens);
+    error InsufficientETHSent();
+    error InvalidTokenAmount();
+    error PriceOutOfRange();
+
+    function buyTokens(uint256 numTokens) external payable {
+        if (numTokens == 0) revert InvalidTokenAmount();
+        uint256 totalPrice = _calculateTotalPrice(numTokens);
         uint256 pricePerToken = totalPrice / numTokens;
-        // this should be enough
-        require(pricePerToken <= maxPricePerToken, "Slippage tolerance exceeded");
+        uint256 maxPricePerToken = pricePerToken * (100 + slippageTolerance) / 100;
 
-        // Slippage check
-        require(msg.value >= totalPrice, "Insufficient ETH sent");
-        // remove this
-        require(((maxPricePerToken * 100) / pricePerToken) <= (100 + slippageTolerance), "Slippage tolerance exceeded");
+        if (msg.value < totalPrice) revert InsufficientETHSent();
+        if (msg.value > maxPricePerToken * numTokens) revert PriceOutOfRange();
 
         balances[msg.sender] += numTokens;
         totalSupply += numTokens;
@@ -34,32 +31,32 @@ contract BondingCurve {
 
         // Refund excess ETH
         if (msg.value > totalPrice) {
-            // use a low level call to send money because this doesnt guarantee sending to Smart Wallets
-            payable(msg.sender).transfer(msg.value - totalPrice);
+            (bool success,) = msg.sender.call{value: msg.value - totalPrice}("");
+            require(success, "ETH refund failed");
         }
     }
 
-    function sellTokens(uint256 numTokens, uint256 minPricePerToken) external {
-        require(numTokens > 0 && balances[msg.sender] >= numTokens, "Invalid token amount");
-        uint256 totalPrice = calculateTotalPrice(numTokens - 1) - calculateTotalPrice(numTokens - 1 - numTokens); //this is not the right way to do it
+    function sellTokens(uint256 numTokens) external {
+        if (numTokens == 0 || balances[msg.sender] < numTokens) revert InvalidTokenAmount();
+        uint256 totalPriceBefore = _calculateTotalPrice(numTokens);
+        totalSupply -= numTokens;
+        uint256 totalPriceAfter = _calculateTotalPrice(numTokens);
+        uint256 totalPrice = totalPriceBefore - totalPriceAfter;
         uint256 pricePerToken = totalPrice / numTokens;
-        require(pricePerToken >= minPricePerToken, "Slippage tolerance exceeded");
+        uint256 minPricePerToken = pricePerToken * (100 - slippageTolerance) / 100;
 
-        // Slippage check
-        // remove
-        require(((minPricePerToken * 100) / pricePerToken) >= (100 - slippageTolerance), "Slippage tolerance exceeded");
+        if (minPricePerToken * numTokens > totalPrice) revert PriceOutOfRange();
 
         balances[msg.sender] -= numTokens;
-        totalSupply -= numTokens;
         emit TokensSold(msg.sender, numTokens, pricePerToken);
-        payable(msg.sender).transfer(totalPrice);
+        (bool success,) = msg.sender.call{value: totalPrice}("");
+        require(success, "ETH transfer failed");
     }
 
-    // Function to calculate the total price for a given amount of tokens
-    function calculateTotalPrice(uint256 numTokens) public view returns (uint256) {
+    function _calculateTotalPrice(uint256 numTokens) internal view returns (uint256) {
         if (numTokens == 0) return 0;
         uint256 lastTokenPrice = initialPrice + slope * (totalSupply + numTokens - 1);
         uint256 firstTokenPrice = initialPrice + slope * totalSupply;
-        return (lastTokenPrice + firstTokenPrice) / 2 * numTokens;
+        return ((lastTokenPrice + firstTokenPrice) * numTokens) / 2;
     }
 }

@@ -23,28 +23,25 @@ contract GodModeTokenTest is Test {
         address alice = makeAddr("alice");
         user1 = bob;
         user2 = alice;
-
-        godModeToken = new GodModeToken(10);
-        godModeToken.transfer(user1, 1000);
     }
 
-    // function testFailSetGodByNonOwner() public {
-    //     vm.startPrank(user1);
-    //     godModeToken.setGod(newGod);
-    //     vm.stopPrank();
-    // }
+    function testFailSetGodByNonOwner() public {
+        vm.startPrank(user1);
+        godModeToken.setGod(newGod);
+        vm.stopPrank();
+    }
 
-    // function testGodTransfer() public {
-    //     // Now `user1` should have 1000 tokens
-    //     godModeToken.godTransfer(user1, user2, 500); // This should pass if user1 has the tokens
+    function testGodTransfer() public {
+        // Now `user1` should have 1000 tokens
+        godModeToken.godTransfer(user1, user2, 500); // This should pass if user1 has the tokens
 
-    //     assertEq(godModeToken.balanceOf(user1), 500);
-    //     assertEq(godModeToken.balanceOf(user2), 500);
-    // }
+        assertEq(godModeToken.balanceOf(user1), 500);
+        assertEq(godModeToken.balanceOf(user2), 500);
+    }
 
-    // function testFailGodTransferByNonGod() public {
-    //     vm.startPrank(user1);
-    //     godModeToken.godTransfer(user1, user2, 500);
-    //     vm.stopPrank();
-    // }
+    function testFailGodTransferByNonGod() public {
+        vm.startPrank(user1);
+        godModeToken.godTransfer(user1, user2, 500);
+        vm.stopPrank();
+    }
 }
