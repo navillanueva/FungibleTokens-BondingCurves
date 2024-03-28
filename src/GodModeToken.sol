@@ -27,7 +27,6 @@ contract GodModeToken is ERC20, Ownable {
         emit GodSet(_newGod);
     }
 
-    // question: transferFrom in the OZ is not overrid, so third parties could still transfer tokens
     function godTransfer(address from, address to, uint256 amount) external {
         if (msg.sender != god) revert NotGod(msg.sender);
         _transfer(from, to, amount);
