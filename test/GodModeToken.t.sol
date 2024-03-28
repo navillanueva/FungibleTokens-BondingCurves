@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 import {Test} from "forge-std/Test.sol";
-import {DeployToken} from "../script/DeployToken.sol";
+import {DeployToken} from "../script/DeployToken.s.sol";
 import {GodModeToken} from "../src/GodModeToken.sol";
 import "./mocks/MockERC20.sol";
 

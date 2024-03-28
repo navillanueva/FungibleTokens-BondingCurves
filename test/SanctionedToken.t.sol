@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 import "forge-std/Test.sol";
-import "../SanctionedToken.sol";
+import "../src/SanctionedToken.sol";
 
 contract SanctionedTokenTest is Test {
     SanctionedToken token;

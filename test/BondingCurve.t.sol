@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 import "forge-std/Test.sol";
-import "../BondingCurve.sol"; 
+import "../src/BondingCurve.sol"; 
 
 contract BondingCurveTest is Test {
     BondingCurve public curve;
