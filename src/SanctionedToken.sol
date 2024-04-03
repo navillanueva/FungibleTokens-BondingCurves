@@ -4,16 +4,16 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
+error AddressAlreadyBanned(address _address);
+error AddressNotBanned(address _address);
+error TransferToBannedAddress(address sender, address recipient);
+error TransferFromBannedAddress(address sender, address recipient, address operator);
+
 contract SanctionedToken is ERC20, Ownable {
     mapping(address => bool) public banned;
 
     // question: should these go here or between the imports and the contract
     // question: what is the difference between errors and events declared oustide of the contract and those declared inside of the contract
-
-    error AddressAlreadyBanned(address _address);
-    error AddressNotBanned(address _address);
-    error TransferToBannedAddress(address sender, address recipient);
-    error TransferFromBannedAddress(address sender, address recipient, address operator);
 
     constructor(string memory name, string memory symbol, address initialOwner)
         ERC20(name, symbol)

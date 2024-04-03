@@ -6,11 +6,9 @@ import {DeploySanctionedToken} from "../script/DeploySanctionedToken.s.sol";
 import {SanctionedToken} from "../src/SanctionedToken.sol";
 
 contract SanctionedTokenTest is Test {
-    
     SanctionedToken public sanctionedToken;
     DeploySanctionedToken public deploySanctionedToken;
-    
-    
+
     address private owner;
     address private user1;
     address private user2;
@@ -18,7 +16,7 @@ contract SanctionedTokenTest is Test {
     function setUp() public {
         deploySanctionedToken = new DeploySanctionedToken();
         sanctionedToken = DeploySanctionedToken(deploySanctionedToken).run();
-        
+
         owner = address(this);
         user1 = address(0x1);
         user2 = address(0x2);

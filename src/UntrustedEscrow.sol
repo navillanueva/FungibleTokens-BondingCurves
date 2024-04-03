@@ -22,6 +22,8 @@ contract UntrustedEscrow is ReentrancyGuard {
 
     // Allows the buyer to deposit tokens into the escrow
 
+    // setting a invariant for safety measures for good development (maybe max withdraw or deposit)
+
     // change this is because there is only one buyer then in the contract
     function deposit(uint256 amount) external nonReentrant {
         require(depositAmount == 0, "Deposit already made");

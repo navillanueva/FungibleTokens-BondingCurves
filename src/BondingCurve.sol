@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 contract BondingCurve {
     uint256 public totalSupply;
-    uint256 public constant initialPrice = 1 ether; 
+    uint256 public constant initialPrice = 1 ether;
     uint256 public constant slope = 0.01 ether;
     uint256 public constant slippageTolerance = 5; // Percent slippage tolerance to prevent sandwich attacks
 
@@ -22,6 +22,7 @@ contract BondingCurve {
         uint256 pricePerToken = totalPrice / numTokens;
         uint256 maxPricePerToken = pricePerToken * (100 + slippageTolerance) / 100;
 
+        // round up
         if (msg.value < totalPrice) revert InsufficientETHSent();
         if (msg.value > maxPricePerToken * numTokens) revert PriceOutOfRange();
 
@@ -30,6 +31,9 @@ contract BondingCurve {
         emit TokensBought(msg.sender, numTokens, pricePerToken);
 
         // Refund excess ETH
+        // protocols usually keep the excess eth
+        // there could possibly be reentrancy in this call function
+        // safest is to not do this
         if (msg.value > totalPrice) {
             (bool success,) = msg.sender.call{value: msg.value - totalPrice}("");
             require(success, "ETH refund failed");
