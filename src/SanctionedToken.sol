@@ -13,7 +13,7 @@ contract SanctionedToken is ERC20, Ownable {
     mapping(address => bool) public banned;
 
     // question: should these go here or between the imports and the contract
-    // question: what is the difference between errors and events declared oustide of the contract and those declared inside of the contract
+    // question: what is the difference between errors and events declared oustide of the contract and those declared inside of the contract   
 
     constructor(string memory name, string memory symbol, address initialOwner)
         ERC20(name, symbol)
@@ -22,6 +22,7 @@ contract SanctionedToken is ERC20, Ownable {
         _mint(msg.sender, 1000000e18);
     }
 
+    // emit event
     function banAddress(address _address) external onlyOwner {
         if (banned[_address]) revert AddressAlreadyBanned(_address);
         banned[_address] = true;
